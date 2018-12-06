@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IPv6 calculator</title>
+
+    <style>
+        td {
+            border : 1px solid white;
+            background-color : lightgray;   
+        }
+    </style>
+</head>
+
+<body>
+        <strong>IPv4/IPv6 subnet calculator</strong>
+    <div id="showWorlk">
+    <p id="errorIp" style="color:red;"></p>
+    IP address  <input id="inputip" type="text" placeholder="ipv6 address"> 
+    <br>
+    Prefix length  <select id="prefix-dropdown"></select>
+    <button onclick="Main()">calculate</button>
+    </div>
+</body>
+<footer>
+        <script src="bignumber.js"></script>
+    <script src="logic.js"></script>
+</footer>
+
+</html>
+<!-----
+<script src="bignumber.js"></script>
+>
