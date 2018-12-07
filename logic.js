@@ -142,34 +142,34 @@ function addZeroAndMakeItArray(colon_list, ip) {
 
     });
 
-    var newword = ip.slice(colon_list[colon_list.length - 1] + 1, ip.length);
+    var text_temp = ip.slice(colon_list[colon_list.length - 1] + 1, ip.length);
     if (ip.length - 1 - colon_list[colon_list.length - 1] < 5) {
-        const length = newword.length;
+        const length = text_temp.length;
         for (i = 0; i < 4 - length; i++) {
-            newword = 0 + newword;
+            text_temp = 0 + text_temp;
         }
-        result.push(newword);
+        result.push(text_temp);
     } else if (ip.length - 1 - colon_list[colon_list.length - 1] > 5) {
         CallError();
         return;
     } else {
-        result.push(newword);
+        result.push(text_temp);
     }
     return result;
 }
 
-function create_Table_detail_ipv6(originalip, ipblock, prefixlength) {
+function create_Table_detail_ipv6(originalip, ipv6_in, prefixlength) {
     if (document.getElementById('content') !== null) {
         document.getElementById('address').innerText = originalip + " /" + prefixlength;
-        document.getElementById('network').innerText = getNetworkString(ipblock);
+        document.getElementById('network').innerText = getNetworkString(ipv6_in);
         document.getElementById('prefixlength').innerText = prefixlength;
-        document.getElementById('networkrange').innerText = IP_divide(create_NetworkRange(ipblock).minlength) + " - \n" + IP_divide(create_NetworkRange(ipblock).maxlength);
+        document.getElementById('networkrange').innerText = IP_divide(create_NetworkRange(ipv6_in).minlength) + " - \n" + IP_divide(create_NetworkRange(ipv6_in).maxlength);
         document.getElementById('totalip').innerText = new BigNumber(2).pow(128 - prefixlength).toFormat();
-        document.getElementById('fullip').innerText = IP_divide(ipblock);
-        document.getElementById('integerid').innerText = new BigNumber(createBinaryString(createBinaryArray(ipblock)), 2).toFixed(0);
-        document.getElementById('hexadecimalid').innerText = create_HexadecimalId(ipblock);
-        document.getElementById('dotdecimalid').innerText = create_colon_DecimalId(ipblock);
-        createSubnetArea(ipblock, prefixlength);
+        document.getElementById('fullip').innerText = IP_divide(ipv6_in);
+        document.getElementById('integerid').innerText = new BigNumber(createBinaryString(createBinaryArray(ipv6_in)), 2).toFixed(0);
+        document.getElementById('hexadecimalid').innerText = create_HexadecimalId(ipv6_in);
+        document.getElementById('dotdecimalid').innerText = create_colon_DecimalId(ipv6_in);
+        createSubnetArea(ipv6_in, prefixlength);
     } else {
         const contentdiv = document.createElement('div');
         contentdiv.setAttribute("id", "content");
@@ -192,7 +192,7 @@ function create_Table_detail_ipv6(originalip, ipblock, prefixlength) {
         let networktxt = document.createElement('td');
         networktxt.appendChild(document.createTextNode('Network'));
         let networkvalue = document.createElement('td');
-        networkvalue.appendChild(document.createTextNode(getNetworkString(ipblock)));
+        networkvalue.appendChild(document.createTextNode(getNetworkString(ipv6_in)));
         networkvalue.setAttribute('id', 'network');
         row = document.createElement('tr');
         row.appendChild(networktxt);
@@ -212,7 +212,7 @@ function create_Table_detail_ipv6(originalip, ipblock, prefixlength) {
         let networkrangetxt = document.createElement('td');
         networkrangetxt.appendChild(document.createTextNode('Network range'));
         let networkrangevalue = document.createElement('td');
-        networkrangevalue.appendChild(document.createTextNode(IP_divide(create_NetworkRange(ipblock).minlength) + " - \n" + IP_divide(create_NetworkRange(ipblock).maxlength)));
+        networkrangevalue.appendChild(document.createTextNode(IP_divide(create_NetworkRange(ipv6_in).minlength) + " - \n" + IP_divide(create_NetworkRange(ipv6_in).maxlength)));
         networkrangevalue.setAttribute('id', 'networkrange');
         row = document.createElement('tr');
         row.appendChild(networkrangetxt);
@@ -240,7 +240,7 @@ function create_Table_detail_ipv6(originalip, ipblock, prefixlength) {
         let fulliptxt = document.createElement('td');
         fulliptxt.appendChild(document.createTextNode('IP Address (Full)'));
         let fullipvalue = document.createElement('td');
-        fullipvalue.appendChild(document.createTextNode(IP_divide(ipblock)));
+        fullipvalue.appendChild(document.createTextNode(IP_divide(ipv6_in)));
         fullipvalue.setAttribute('id', 'fullip');
         row = document.createElement('tr');
         row.appendChild(fulliptxt);
@@ -251,7 +251,7 @@ function create_Table_detail_ipv6(originalip, ipblock, prefixlength) {
         let integeridtxt = document.createElement('td');
         integeridtxt.appendChild(document.createTextNode('Integer ID'));
         let integeridvalue = document.createElement('td');
-        integeridvalue.appendChild(document.createTextNode(new BigNumber(createBinaryString(createBinaryArray(ipblock)), 2).toFixed(0)));
+        integeridvalue.appendChild(document.createTextNode(new BigNumber(createBinaryString(createBinaryArray(ipv6_in)), 2).toFixed(0)));
         integeridvalue.setAttribute('id', 'integerid');
         row = document.createElement('tr');
         row.appendChild(integeridtxt);
@@ -262,7 +262,7 @@ function create_Table_detail_ipv6(originalip, ipblock, prefixlength) {
         let hexadecimaltxt = document.createElement('td');
         hexadecimaltxt.appendChild(document.createTextNode('Hexadecimal ID'));
         let hexadecimalvalue = document.createElement('td');
-        hexadecimalvalue.appendChild(document.createTextNode(create_HexadecimalId(ipblock)));
+        hexadecimalvalue.appendChild(document.createTextNode(create_HexadecimalId(ipv6_in)));
         hexadecimalvalue.setAttribute('id', 'hexadecimalid');
         row = document.createElement('tr');
         row.appendChild(hexadecimaltxt);
@@ -273,43 +273,15 @@ function create_Table_detail_ipv6(originalip, ipblock, prefixlength) {
         let dotdecimaltxt = document.createElement('td');
         dotdecimaltxt.appendChild(document.createTextNode('Dotted decimal ID'));
         let dotdecimalvalue = document.createElement('td');
-        dotdecimalvalue.appendChild(document.createTextNode(create_colon_DecimalId(ipblock)));
+        dotdecimalvalue.appendChild(document.createTextNode(create_colon_DecimalId(ipv6_in)));
         dotdecimalvalue.setAttribute('id', 'dotdecimalid');
         row = document.createElement('tr');
         row.appendChild(dotdecimaltxt);
         row.appendChild(dotdecimalvalue);
         table2.appendChild(row);
         contentdiv.appendChild(table2);
-        contentdiv.appendChild(document.createElement('h3').appendChild(document.createTextNode('subnet level 1')));
-        createSubnetArea(prefixlength)
     }
 }
-
-function createSubnetArea(prefixlength) {
-
-    if (document.getElementById('subnetarea')) {
-        document.body.removeChild(document.getElementById('subnetarea'));
-    }
-
-    let subnetarea = document.createElement('div');
-    subnetarea.setAttribute('id', 'subnetarea');
-    document.body.appendChild(subnetarea);
-
-    for (i = 1; i < 64 && Number.parseInt(prefixlength) + i <= 128; i++) {
-        let subnet = document.createElement('a');
-        let sunnet_name = Number.parseInt(prefixlength) + i;
-        if (sunnet_name < 64) {
-            subnet.appendChild(document.createTextNode(`${new BigNumber(2).pow(i).toFormat()} networks /${sunnet_name} (${new BigNumber(2).pow(64 - (sunnet_name)).toFormat()} networks /64)`))
-        } else {
-            subnet.appendChild(document.createTextNode(`${new BigNumber(2).pow(i).toFormat()} networks /${sunnet_name} (${new BigNumber(2).pow(128 - (sunnet_name)).toFormat()} addresses)`))
-        }
-        subnetarea.appendChild(subnet);
-        subnetarea.appendChild(document.createElement('br'));
-    }
-}
-
-
-
 
 function CallError() {
     document.getElementById('showWorlk').innerHTML = "Error Invalid IPv6 address Press F5 to back pang";
