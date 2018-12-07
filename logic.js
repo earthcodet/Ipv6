@@ -163,12 +163,12 @@ function create_Table_detail_ipv6(originalip, ipblock, prefixlength) {
         document.getElementById('address').innerText = originalip + " /" + prefixlength;
         document.getElementById('network').innerText = getNetworkString(ipblock);
         document.getElementById('prefixlength').innerText = prefixlength;
-        document.getElementById('networkrange').innerText = divideIpBlock(calculateNetworkRange(ipblock).minlength) + " - \n" + divideIpBlock(calculateNetworkRange(ipblock).maxlength);
+        document.getElementById('networkrange').innerText = IP_divide(create_NetworkRange(ipblock).minlength) + " - \n" + IP_divide(create_NetworkRange(ipblock).maxlength);
         document.getElementById('totalip').innerText = new BigNumber(2).pow(128 - prefixlength).toFormat();
-        document.getElementById('fullip').innerText = divideIpBlock(ipblock);
+        document.getElementById('fullip').innerText = IP_divide(ipblock);
         document.getElementById('integerid').innerText = new BigNumber(createBinaryString(createBinaryArray(ipblock)), 2).toFixed(0);
-        document.getElementById('hexadecimalid').innerText = createHexadecimalId(ipblock);
-        document.getElementById('dotdecimalid').innerText = createDotDecimalId(ipblock);
+        document.getElementById('hexadecimalid').innerText = create_HexadecimalId(ipblock);
+        document.getElementById('dotdecimalid').innerText = create_colon_DecimalId(ipblock);
         createSubnetArea(ipblock, prefixlength);
     } else {
         const contentdiv = document.createElement('div');
@@ -177,7 +177,7 @@ function create_Table_detail_ipv6(originalip, ipblock, prefixlength) {
         let table = document.createElement('table');
         table.setAttribute('id', 'table1');
 
-        //original address
+        //IP address
         let addresstxt = document.createElement('td');
         addresstxt.appendChild(document.createTextNode('IP address'));
         let address = document.createElement('td');
@@ -212,7 +212,7 @@ function create_Table_detail_ipv6(originalip, ipblock, prefixlength) {
         let networkrangetxt = document.createElement('td');
         networkrangetxt.appendChild(document.createTextNode('Network range'));
         let networkrangevalue = document.createElement('td');
-        networkrangevalue.appendChild(document.createTextNode(divideIpBlock(calculateNetworkRange(ipblock).minlength) + " - \n" + divideIpBlock(calculateNetworkRange(ipblock).maxlength)));
+        networkrangevalue.appendChild(document.createTextNode(IP_divide(create_NetworkRange(ipblock).minlength) + " - \n" + IP_divide(create_NetworkRange(ipblock).maxlength)));
         networkrangevalue.setAttribute('id', 'networkrange');
         row = document.createElement('tr');
         row.appendChild(networkrangetxt);
@@ -240,14 +240,14 @@ function create_Table_detail_ipv6(originalip, ipblock, prefixlength) {
         let fulliptxt = document.createElement('td');
         fulliptxt.appendChild(document.createTextNode('IP Address (Full)'));
         let fullipvalue = document.createElement('td');
-        fullipvalue.appendChild(document.createTextNode(divideIpBlock(ipblock)));
+        fullipvalue.appendChild(document.createTextNode(IP_divide(ipblock)));
         fullipvalue.setAttribute('id', 'fullip');
         row = document.createElement('tr');
         row.appendChild(fulliptxt);
         row.appendChild(fullipvalue);
         table2.appendChild(row);
 
-        //integer id
+        //Integer id
         let integeridtxt = document.createElement('td');
         integeridtxt.appendChild(document.createTextNode('Integer ID'));
         let integeridvalue = document.createElement('td');
@@ -258,22 +258,22 @@ function create_Table_detail_ipv6(originalip, ipblock, prefixlength) {
         row.appendChild(integeridvalue);
         table2.appendChild(row);
 
-        //hexadecimal id
+        //Hexadecimal id
         let hexadecimaltxt = document.createElement('td');
         hexadecimaltxt.appendChild(document.createTextNode('Hexadecimal ID'));
         let hexadecimalvalue = document.createElement('td');
-        hexadecimalvalue.appendChild(document.createTextNode(createHexadecimalId(ipblock)));
+        hexadecimalvalue.appendChild(document.createTextNode(create_HexadecimalId(ipblock)));
         hexadecimalvalue.setAttribute('id', 'hexadecimalid');
         row = document.createElement('tr');
         row.appendChild(hexadecimaltxt);
         row.appendChild(hexadecimalvalue);
         table2.appendChild(row);
 
-        //dot decimal id
+        //Dotted decimal id
         let dotdecimaltxt = document.createElement('td');
         dotdecimaltxt.appendChild(document.createTextNode('Dotted decimal ID'));
         let dotdecimalvalue = document.createElement('td');
-        dotdecimalvalue.appendChild(document.createTextNode(createDotDecimalId(ipblock)));
+        dotdecimalvalue.appendChild(document.createTextNode(create_colon_DecimalId(ipblock)));
         dotdecimalvalue.setAttribute('id', 'dotdecimalid');
         row = document.createElement('tr');
         row.appendChild(dotdecimaltxt);
@@ -316,7 +316,7 @@ function CallError() {
 }
 
 function fillZeroInBinaryArray(array) {
-    //build zero
+   
     array.map((block) => {
         let zeroline = ""
         while (zeroline.length < 16 - block.length) {
@@ -331,7 +331,7 @@ function fillZeroInBinaryArray(array) {
 function getNetworkString(ipblock) {
     const ipdata = calculateNetwork(ipblock);
 
-    //make network string
+  
 
     let returnstring = "";
     for (i = 0; i < ipdata.binaryblock.length; i++) {
@@ -387,7 +387,7 @@ function calculateNetwork(ipblock) {
     prefixlength == 128 ? 7 : blockindex = Number.parseInt(prefixlength / 16);
     const blockradix = prefixlength % 16;
   
-    //fill block with zero
+   
     let newstring = "";
     if (blockindex > 0) {
         if (blockindex === 8) {
@@ -406,7 +406,7 @@ function calculateNetwork(ipblock) {
   
     newblockbinary[blockindex] = newstring;
 
-    //fill everybit behind prefix with zero
+   
     for (i = blockindex + 1; i < ipblock.length; i++) {
         newblockbinary[i] = "0000000000000000";
     }
@@ -419,7 +419,7 @@ function calculateNetwork(ipblock) {
     return returnjson;
 }
 
-function calculateNetworkRange(ipblock) {
+function create_NetworkRange(ipblock) {
     const minrangedata = calculateNetwork(ipblock);
     const binaryarray = minrangedata.binaryblock;
     const blockindex = minrangedata.blockindex;
@@ -459,7 +459,7 @@ function calculateNetworkRange(ipblock) {
     return returndata;
 }
 
-function divideIpBlock(ipblock) {
+function IP_divide(ipblock) {
 
     let returnstring = "";
     for (i = 0; i < ipblock.length; i++) {
@@ -474,7 +474,7 @@ function divideIpBlock(ipblock) {
     return returnstring;
 }
 
-function createHexadecimalId(ipblock) {
+function create_HexadecimalId(ipblock) {
     let returnstring = "0x";
 
     ipblock.map((block) => {
@@ -484,7 +484,7 @@ function createHexadecimalId(ipblock) {
     return returnstring;
 }
 
-function createDotDecimalId(ipblock) {
+function create_colon_DecimalId(ipblock) {
     let binaryarr = createBinaryArray(ipblock);
 
     let returnstring = ""
